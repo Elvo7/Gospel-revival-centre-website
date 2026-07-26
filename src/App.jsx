@@ -5,8 +5,7 @@ import "aos/dist/aos.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
-
-import Home from "./Pages/Home";
+import Home from "./pages/Home";
 
 function App() {
   useEffect(() => {

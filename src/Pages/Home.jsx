@@ -7,7 +7,7 @@ import PastorWelcome from "../components/PastorWelcome";
 import SermonsPreview from "../components/SermonsPreview";
 import EventsPreview from "../components/EventsPreview";
 import GalleryPreview from "../components/GalleryPreview";
-import GivePreview from "../components/GivePreview";
+import GivePreview from "../components/Givepreview";
 import ContactPreview from "../components/ContactPreview";
 
 function Home() {
