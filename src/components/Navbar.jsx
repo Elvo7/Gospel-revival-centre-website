@@ -1,10 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.png";
 
+const API_URL = "http://localhost:5000/api/settings/public";
+
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const [settings, setSettings] = useState({
+    church_name: "Gospel Revival Centre",
+    address: "Kangemi",
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadSettings = async () => {
+      try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (mounted && data.success && data.settings) {
+          setSettings((current) => ({
+            ...current,
+            ...data.settings,
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to load navbar settings:", error);
+      }
+    };
+
+    loadSettings();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -26,17 +64,17 @@ function Navbar() {
         <div className="flex items-center gap-3">
           <img
             src={logo}
-            alt="Gospel Revival Centre Logo"
+            alt={`${settings.church_name} Logo`}
             className="w-14 h-14 rounded-full"
           />
 
           <div>
             <h2 className="font-bold text-green-700 text-lg">
-              Gospel Revival Centre
+              {settings.church_name}
             </h2>
 
             <p className="text-red-600 text-sm">
-              Kangemi
+              {settings.address || "Kangemi"}
             </p>
           </div>
         </div>

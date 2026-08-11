@@ -1,26 +1,23 @@
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-// ==========================================
-// PUBLIC
-// ==========================================
-import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import BackToTop from "./components/BackToTop";
+import Home from "./Pages/Home";
 
-// ==========================================
-// ADMIN
-// ==========================================
-import Dashboard from "./pages/admin/Dashboard.jsx";
-import Members from "./pages/admin/Members.jsx";
-import Events from "./pages/admin/Events.jsx";
-import Sermons from "./pages/admin/Sermons.jsx";
-import Gallery from "./pages/admin/Gallery.jsx";
-import Announcements from "./pages/admin/Announcements.jsx";
-import Donations from "./pages/admin/Donations.jsx";
-import Settings from "./pages/admin/Settings.jsx";
+import Login from "./Pages/login";
+import Dashboard from "./Pages/admin/Dashboard";
+import Members from "./Pages/admin/Members";
+import Events from "./Pages/admin/Events";
+import Sermons from "./Pages/admin/Sermons";
+import Gallery from "./Pages/admin/Gallery";
+import Donations from "./Pages/admin/Donations";
+import Announcements from "./Pages/admin/Announcements";
+import Settings from "./Pages/admin/Settings";
 
-// ==========================================
-// PROTECTED ROUTE
-// ==========================================
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
@@ -31,26 +28,41 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-// ==========================================
-// APP
-// ==========================================
+function PublicLayout() {
+  return (
+    <>
+      <Navbar />
+      <Home />
+      <BackToTop />
+      <Footer />
+    </>
+  );
+}
+
 function App() {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   return (
     <Routes>
 
-      {/* PUBLIC HOMEPAGE */}
-      <Route
-        path="/"
-        element={<Home />}
-      />
+      {/* =========================
+          PUBLIC WEBSITE
+      ========================= */}
+      <Route path="/" element={<PublicLayout />} />
 
-      {/* ADMIN LOGIN */}
-      <Route
-        path="/login"
-        element={<Login />}
-      />
+      {/* =========================
+          ADMIN LOGIN
+      ========================= */}
+      <Route path="/login" element={<Login />} />
 
-      {/* DASHBOARD */}
+      {/* =========================
+          ADMIN DASHBOARD
+      ========================= */}
       <Route
         path="/admin"
         element={
@@ -60,7 +72,9 @@ function App() {
         }
       />
 
-      {/* MEMBERS */}
+      {/* =========================
+          MEMBERS
+      ========================= */}
       <Route
         path="/admin/members"
         element={
@@ -70,7 +84,9 @@ function App() {
         }
       />
 
-      {/* EVENTS */}
+      {/* =========================
+          EVENTS
+      ========================= */}
       <Route
         path="/admin/events"
         element={
@@ -80,7 +96,9 @@ function App() {
         }
       />
 
-      {/* SERMONS */}
+      {/* =========================
+          SERMONS
+      ========================= */}
       <Route
         path="/admin/sermons"
         element={
@@ -90,7 +108,9 @@ function App() {
         }
       />
 
-      {/* GALLERY */}
+      {/* =========================
+          GALLERY
+      ========================= */}
       <Route
         path="/admin/gallery"
         element={
@@ -100,7 +120,9 @@ function App() {
         }
       />
 
-      {/* DONATIONS */}
+      {/* =========================
+          DONATIONS
+      ========================= */}
       <Route
         path="/admin/donations"
         element={
@@ -110,7 +132,9 @@ function App() {
         }
       />
 
-      {/* ANNOUNCEMENTS */}
+      {/* =========================
+          ANNOUNCEMENTS
+      ========================= */}
       <Route
         path="/admin/announcements"
         element={
@@ -120,7 +144,9 @@ function App() {
         }
       />
 
-      {/* SETTINGS */}
+      {/* =========================
+          SETTINGS
+      ========================= */}
       <Route
         path="/admin/settings"
         element={
@@ -130,15 +156,12 @@ function App() {
         }
       />
 
-      {/* UNKNOWN ROUTES */}
+      {/* =========================
+          UNKNOWN ROUTES
+      ========================= */}
       <Route
         path="*"
-        element={
-          <Navigate
-            to="/"
-            replace
-          />
-        }
+        element={<Navigate to="/" replace />}
       />
 
     </Routes>
