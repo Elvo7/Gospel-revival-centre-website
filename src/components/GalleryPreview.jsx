@@ -1,12 +1,52 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+
 function GalleryPreview() {
-  const images = [
-    "/gallery1.jpg",
-    "/gallery2.jpg",
-    "/gallery3.jpg",
-    "/gallery4.jpg",
-    "/gallery5.jpg",
-    "/gallery6.jpg",
-  ];
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const response = await api.get("/gallery");
+
+        const data = response.data;
+
+        const galleryList = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.gallery)
+          ? data.gallery
+          : Array.isArray(data?.images)
+          ? data.images
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
+
+        setImages(galleryList.slice(0, 6));
+      } catch (error) {
+        console.error("Failed to load gallery:", error);
+        setImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
+  const getImageUrl = (image) => {
+    if (typeof image === "string") {
+      return image;
+    }
+
+    return (
+      image?.image_url ||
+      image?.image ||
+      image?.url ||
+      image?.imageUrl ||
+      ""
+    );
+  };
 
   return (
     <section className="bg-gray-50 py-20">
@@ -23,31 +63,68 @@ function GalleryPreview() {
           </p>
         </div>
 
+        {/* Loading */}
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-gray-600">
+              Loading gallery...
+            </p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && images.length === 0 && (
+          <div className="text-center py-12 bg-white rounded-xl shadow">
+            <p className="text-gray-600">
+              No gallery images available at the moment.
+            </p>
+          </div>
+        )}
+
         {/* Gallery */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {images.map((image, index) => (
-            <div
-              key={image}
-              className="group overflow-hidden rounded-xl shadow-lg bg-white"
-            >
-              <img
-                src={image}
-                alt={`Gospel Revival Centre gallery ${index + 1}`}
-                className="w-full h-72 object-cover transition duration-500 group-hover:scale-110"
-              />
-            </div>
-          ))}
-        </div>
+        {!loading && images.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {images.map((image, index) => {
+              const imageUrl = getImageUrl(image);
+
+              return (
+                <div
+                  key={image?.id || imageUrl || index}
+                  className="group overflow-hidden rounded-xl shadow-lg bg-white"
+                >
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={
+                        image?.title ||
+                        `Gospel Revival Centre gallery ${index + 1}`
+                      }
+                      className="w-full h-72 object-cover transition duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-72 bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500">
+                        Image unavailable
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* View Gallery */}
-        <div className="text-center mt-12">
-          <button
-            type="button"
-            className="border-2 border-green-700 text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-700 hover:text-white transition"
-          >
-            View Full Gallery
-          </button>
-        </div>
+        {!loading && images.length > 0 && (
+          <div className="text-center mt-12">
+            <button
+              type="button"
+              className="border-2 border-green-700 text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-700 hover:text-white transition"
+            >
+              View Full Gallery
+            </button>
+          </div>
+        )}
 
       </div>
     </section>
