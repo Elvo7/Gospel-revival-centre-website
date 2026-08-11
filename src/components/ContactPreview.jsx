@@ -1,52 +1,33 @@
-import { useEffect, useState } from "react";
-
-const API_URL = "http://localhost:5000/api/settings/public";
+import useChurchSettings from "../hooks/useChurchSettings";
 
 function ContactPreview() {
-  const [settings, setSettings] = useState({
-    address: "Kangemi, Nairobi, Kenya",
-    phone: "+254 740955883",
-    email: "info@gospelrevivalcentre.org",
-    sunday_service: "Sunday: 8:00 AM",
-    midweek_service: "Wednesday Prayer: 5:30 PM",
-    prayer_service: "Friday Bible Study: 6:00 PM",
-  });
+  const { settings, loading } = useChurchSettings();
 
-  useEffect(() => {
-    let mounted = true;
+  const address =
+    settings?.address?.trim() || "Kangemi, Nairobi, Kenya";
 
-    const loadSettings = async () => {
-      try {
-        const response = await fetch(API_URL);
+  const phone =
+    settings?.phone?.trim() || "+254 740955883";
 
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
+  const email =
+    settings?.email?.trim() || "info@gospelrevivalcentre.org";
 
-        const data = await response.json();
+  const sundayService =
+    settings?.sunday_service?.trim() || "Sunday: 8:00 AM";
 
-        if (mounted && data.success && data.settings) {
-          setSettings((current) => ({
-            ...current,
-            ...data.settings,
-          }));
-        }
-      } catch (error) {
-        console.error("Failed to load contact settings:", error);
-      }
-    };
+  const midweekService =
+    settings?.midweek_service?.trim() ||
+    "Wednesday Prayer: 5:30 PM";
 
-    loadSettings();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const prayerService =
+    settings?.prayer_service?.trim() ||
+    "Friday Bible Study: 6:00 PM";
 
   return (
     <section className="py-20 bg-gray-100">
       <div className="max-w-7xl mx-auto px-6">
 
+        {/* Section Heading */}
         <div className="text-center mb-14">
           <h2 className="text-4xl font-bold text-green-700">
             Contact Us
@@ -57,84 +38,88 @@ function ContactPreview() {
           </p>
         </div>
 
+        {/* Contact + Map */}
         <div className="grid lg:grid-cols-2 gap-10">
 
+          {/* Contact Information */}
           <div className="bg-white rounded-xl shadow-lg p-8">
-
             <div className="space-y-6">
 
+              {/* Address */}
               <div>
                 <h4 className="font-bold text-green-700">
-                  📍 Address
+                  Address
                 </h4>
 
-                <p>
-                  {settings.address || "Kangemi, Nairobi, Kenya"}
+                <p className="mt-1 text-gray-700">
+                  {loading ? "Loading..." : address}
                 </p>
               </div>
 
+              {/* Phone */}
               <div>
                 <h4 className="font-bold text-green-700">
-                  ☎ Phone
+                  Phone
                 </h4>
 
                 <a
-                  href={`tel:${settings.phone || "+254740955883"}`}
-                  className="hover:text-green-700"
+                  href={`tel:${phone.replace(/\s+/g, "")}`}
+                  className="mt-1 inline-block text-gray-700 hover:text-green-700 transition"
                 >
-                  {settings.phone || "+254 740955883"}
+                  {loading ? "Loading..." : phone}
                 </a>
               </div>
 
+              {/* Email */}
               <div>
                 <h4 className="font-bold text-green-700">
-                  ✉ Email
+                  Email
                 </h4>
 
                 <a
-                  href={`mailto:${
-                    settings.email || "info@gospelrevivalcentre.org"
-                  }`}
-                  className="hover:text-green-700"
+                  href={`mailto:${email}`}
+                  className="mt-1 inline-block text-gray-700 hover:text-green-700 transition"
                 >
-                  {settings.email || "info@gospelrevivalcentre.org"}
+                  {loading ? "Loading..." : email}
                 </a>
               </div>
 
+              {/* Service Times */}
               <div>
                 <h4 className="font-bold text-green-700">
-                  🕘 Service Times
+                  Service Times
                 </h4>
 
-                <p>
-                  {settings.sunday_service || "Sunday: 8:00 AM"}
-                </p>
+                <div className="mt-2 space-y-1 text-gray-700">
+                  <p>
+                    {loading ? "Loading..." : sundayService}
+                  </p>
 
-                <p>
-                  {settings.midweek_service ||
-                    "Wednesday Prayer: 5:30 PM"}
-                </p>
+                  <p>
+                    {loading ? "Loading..." : midweekService}
+                  </p>
 
-                <p>
-                  {settings.prayer_service ||
-                    "Friday Bible Study: 6:00 PM"}
-                </p>
+                  <p>
+                    {loading ? "Loading..." : prayerService}
+                  </p>
+                </div>
               </div>
 
             </div>
-
           </div>
 
+          {/* Google Map */}
           <div className="rounded-xl overflow-hidden shadow-lg">
-
             <iframe
-              title="Church Map"
+              title="Gospel Revival Centre Kangemi Map"
               src="https://www.google.com/maps?q=Kangemi,Nairobi&output=embed"
               width="100%"
               height="450"
               loading="lazy"
-            ></iframe>
-
+              style={{ border: 0 }}
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
 
         </div>
