@@ -6,6 +6,12 @@ function PastorWelcome() {
   const pastorName =
     settings?.pastor_name?.trim() || "Our Pastor";
 
+  const churchName =
+    settings?.church_name?.trim() || "Gospel Revival Centre";
+
+  const address =
+    settings?.address?.trim() || "Kangemi";
+
   return (
     <section className="bg-gray-100 py-20">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
@@ -27,10 +33,10 @@ function PastorWelcome() {
           </h2>
 
           <p className="text-gray-700 leading-8 mb-6">
-            Welcome to Gospel Revival Centre Kangemi. We are delighted that
-            you have visited our website. Our prayer is that you will
-            experience God's love, grow in faith, and find a place where you
-            belong.
+            Welcome to {churchName} {address && `${address}`}. We are
+            delighted that you have visited our website. Our prayer is that
+            you will experience God's love, grow in faith, and find a place
+            where you belong.
           </p>
 
           <blockquote className="border-l-4 border-green-700 pl-4 italic text-gray-600">
