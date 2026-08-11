@@ -20,10 +20,14 @@ export default function useChurchSettings() {
         const data = await response.json();
 
         if (mounted && data.success) {
-          setSettings(data.settings);
+          setSettings(data.settings || {});
         }
       } catch (error) {
         console.error("Failed to load church settings:", error);
+
+        if (mounted) {
+          setSettings({});
+        }
       } finally {
         if (mounted) {
           setLoading(false);
