@@ -36,10 +36,12 @@ function SermonsPreview() {
               key={sermon.title}
               className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition"
             >
+              {/* Video Placeholder */}
               <div className="bg-black h-52 flex items-center justify-center text-white text-5xl">
                 ▶
               </div>
 
+              {/* Sermon Details */}
               <div className="p-6">
 
                 <h3 className="text-2xl font-bold text-green-700">
