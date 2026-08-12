@@ -11,13 +11,16 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+const FRONTEND_URL =
+  "https://gospel-revival-centre-website-ipfkmes4y-elvo7s-projects.vercel.app";
+
 // ==========================================
 // MIDDLEWARE
 // ==========================================
 
 app.use(
   cors({
-    origin: true,
+    origin: FRONTEND_URL,
     credentials: true,
   })
 );
@@ -105,7 +108,5 @@ app.use((err, req, res, next) => {
 // ==========================================
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(
-    `Gospel Revival Centre API running on port ${PORT}`
-  );
+  console.log(`Gospel Revival Centre API running on port ${PORT}`);
 });
