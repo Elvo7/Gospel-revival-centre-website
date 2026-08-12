@@ -5,7 +5,7 @@ import axios from "axios";
 // ==========================================
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://gospel-revival-centre-api.onrender.com/api",
 });
 
 // ==========================================
@@ -22,10 +22,7 @@ export const login = async (email, password) => {
 };
 
 export const register = async (user) => {
-  const { data } = await api.post(
-    "/auth/register",
-    user
-  );
+  const { data } = await api.post("/auth/register", user);
 
   return data;
 };
@@ -51,27 +48,19 @@ export const getMembers = async () => {
 };
 
 export const addMember = async (member) => {
-  const { data } = await api.post(
-    "/members",
-    member
-  );
+  const { data } = await api.post("/members", member);
 
   return data.member;
 };
 
 export const updateMember = async (id, member) => {
-  const { data } = await api.put(
-    `/members/${id}`,
-    member
-  );
+  const { data } = await api.put(`/members/${id}`, member);
 
   return data.member;
 };
 
 export const deleteMember = async (id) => {
-  const { data } = await api.delete(
-    `/members/${id}`
-  );
+  const { data } = await api.delete(`/members/${id}`);
 
   return data;
 };
@@ -87,27 +76,19 @@ export const getEvents = async () => {
 };
 
 export const addEvent = async (event) => {
-  const { data } = await api.post(
-    "/events",
-    event
-  );
+  const { data } = await api.post("/events", event);
 
   return data.event;
 };
 
 export const updateEvent = async (id, event) => {
-  const { data } = await api.put(
-    `/events/${id}`,
-    event
-  );
+  const { data } = await api.put(`/events/${id}`, event);
 
   return data.event;
 };
 
 export const deleteEvent = async (id) => {
-  const { data } = await api.delete(
-    `/events/${id}`
-  );
+  const { data } = await api.delete(`/events/${id}`);
 
   return data;
 };
@@ -123,27 +104,19 @@ export const getSermons = async () => {
 };
 
 export const addSermon = async (sermon) => {
-  const { data } = await api.post(
-    "/sermons",
-    sermon
-  );
+  const { data } = await api.post("/sermons", sermon);
 
   return data.sermon;
 };
 
 export const updateSermon = async (id, sermon) => {
-  const { data } = await api.put(
-    `/sermons/${id}`,
-    sermon
-  );
+  const { data } = await api.put(`/sermons/${id}`, sermon);
 
   return data.sermon;
 };
 
 export const deleteSermon = async (id) => {
-  const { data } = await api.delete(
-    `/sermons/${id}`
-  );
+  const { data } = await api.delete(`/sermons/${id}`);
 
   return data;
 };
@@ -153,16 +126,12 @@ export const deleteSermon = async (id) => {
 // ==========================================
 
 export const getAnnouncements = async () => {
-  const { data } = await api.get(
-    "/announcements"
-  );
+  const { data } = await api.get("/announcements");
 
   return Array.isArray(data) ? data : [];
 };
 
-export const addAnnouncement = async (
-  announcement
-) => {
+export const addAnnouncement = async (announcement) => {
   const { data } = await api.post(
     "/announcements",
     announcement
@@ -196,9 +165,7 @@ export const deleteAnnouncement = async (id) => {
 // ==========================================
 
 export const getDonations = async () => {
-  const { data } = await api.get(
-    "/donations"
-  );
+  const { data } = await api.get("/donations");
 
   return Array.isArray(data) ? data : [];
 };
@@ -237,24 +204,15 @@ export const deleteDonation = async (id) => {
 // ==========================================
 
 export const getGallery = async () => {
-  const { data } = await api.get(
-    "/gallery"
-  );
+  const { data } = await api.get("/gallery");
 
   return data.gallery || [];
 };
 
-export const uploadGalleryImage = async (
-  formData
-) => {
+export const uploadGalleryImage = async (formData) => {
   const { data } = await api.post(
     "/gallery",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+    formData
   );
 
   return data.gallery;
@@ -274,17 +232,13 @@ export const deleteGalleryImage = async (id) => {
 
 // Admin: Get church settings
 export const getSettings = async () => {
-  const { data } = await api.get(
-    "/settings"
-  );
+  const { data } = await api.get("/settings");
 
   return data.settings || data;
 };
 
 // Admin: Update church settings
-export const updateSettings = async (
-  settings
-) => {
+export const updateSettings = async (settings) => {
   const { data } = await api.put(
     "/settings",
     settings
@@ -310,8 +264,7 @@ export const changePassword = async (
   currentPassword,
   newPassword
 ) => {
-  const token =
-    localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   const { data } = await api.put(
     "/settings/admin-password",
