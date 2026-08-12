@@ -6,11 +6,36 @@ const cors = require("cors");
 const app = express();
 
 // ==========================================
+// PRODUCTION CONFIGURATION
+// ==========================================
+
+const PORT = process.env.PORT || 5000;
+
+// ==========================================
 // MIDDLEWARE
 // ==========================================
 
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
+
+// ==========================================
+// HEALTH CHECK
+// ==========================================
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: "ok",
+    service: "Gospel Revival Centre API",
+  });
+});
 
 // ==========================================
 // ROUTES
@@ -45,9 +70,33 @@ app.use("/api/settings", settingsRoutes);
 // ==========================================
 
 app.get("/", (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
     message: "Gospel Revival Centre API is running...",
+  });
+});
+
+// ==========================================
+// 404 HANDLER
+// ==========================================
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API endpoint not found.",
+  });
+});
+
+// ==========================================
+// GLOBAL ERROR HANDLER
+// ==========================================
+
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal server error.",
   });
 });
 
@@ -55,8 +104,8 @@ app.get("/", (req, res) => {
 // START SERVER
 // ==========================================
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(
+    `Gospel Revival Centre API running on port ${PORT}`
+  );
 });
